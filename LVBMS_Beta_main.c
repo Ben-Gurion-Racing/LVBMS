@@ -50,9 +50,6 @@ void BGR_CAN_Tx(uint8_t node);
 void BGR_CAN_Rx(void);
 void BGR_Error_Handler(void);
 
-
-
-
 /* Private variables ---------------------------------------------------------*/
 
 //	SystemClock variables:
@@ -135,6 +132,7 @@ int main(void)
 
   while (1)
   {
+
 	  //Timing Test: Set GPIO pin high
 	  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,GPIO_PIN_SET);
 
@@ -247,7 +245,7 @@ int main(void)
 
 	  //Timing Test: Set GPIO pin low
 	  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,GPIO_PIN_RESET);
-	  HAL_Delay(250);
+	  HAL_Delay(500);
   }
 }
 
@@ -568,7 +566,7 @@ void BGR_CAN_Filter_Config(void)
 		can_filter_init.FilterBank  = 1;					// Filter number 1.
 		can_filter_init.FilterIdHigh = 0x0600;  			// id_0x30 - 00000110000|00000
 		can_filter_init.FilterIdLow = 0x0000;
-		can_filter_init.FilterMaskIdHigh = 0XFFF0;          // mask    - 11111111111|00000
+		can_filter_init.FilterMaskIdHigh = 0XFFE0;          // mask    - 11111111111|00000
 		can_filter_init.FilterMaskIdLow = 0x0000;
 
 		if( HAL_CAN_ConfigFilter(&hcan,&can_filter_init) != HAL_OK)
@@ -580,7 +578,7 @@ void BGR_CAN_Filter_Config(void)
 		can_filter_init.FilterBank  = 2;					// Filter number 2.
 		can_filter_init.FilterIdHigh = 0x0800;  			// id_0x40 - 00001000000|00000
 		can_filter_init.FilterIdLow = 0x0000;
-		can_filter_init.FilterMaskIdHigh = 0XFFF0;          // mask    - 11111111111|00000
+		can_filter_init.FilterMaskIdHigh = 0XFFE0;          // mask    - 11111111111|00000
 		can_filter_init.FilterMaskIdLow = 0x0000;
 
 		if( HAL_CAN_ConfigFilter(&hcan,&can_filter_init) != HAL_OK)
@@ -592,7 +590,7 @@ void BGR_CAN_Filter_Config(void)
 		can_filter_init.FilterBank  = 3;					// Filter number 3.
 		can_filter_init.FilterIdHigh = 0x0A00;  			// id_0x50 - 00001010000|00000
 		can_filter_init.FilterIdLow = 0x0000;
-		can_filter_init.FilterMaskIdHigh = 0XFFF0;          // mask    - 11111111111|00000
+		can_filter_init.FilterMaskIdHigh = 0XFFE0;          // mask    - 11111111111|00000
 		can_filter_init.FilterMaskIdLow = 0x0000;
 
 		if( HAL_CAN_ConfigFilter(&hcan,&can_filter_init) != HAL_OK)
@@ -727,7 +725,7 @@ void BGR_CAN_Rx(void)
 		{
 			CanNode = 1;
 			BGR_CAN_Tx(CanNode);
-
+			HAL_Delay(1);
 			CanNode = 2;
 			BGR_CAN_Tx(CanNode);
 			return;
@@ -738,7 +736,7 @@ void BGR_CAN_Rx(void)
 
 			CanNode = 3;
 			BGR_CAN_Tx(CanNode);
-
+			HAL_Delay(1);
 			CanNode = 4;
 			BGR_CAN_Tx(CanNode);
 			return;
@@ -746,15 +744,21 @@ void BGR_CAN_Rx(void)
 
 		if(RxHeader.StdId == Id_40)
 		{
-//			CanNode = 3;
-//			BGR_CAN_Tx(CanNode);
+			CanNode = 1;
+			BGR_CAN_Tx(CanNode);
+			HAL_Delay(1);
+			CanNode = 2;
+			BGR_CAN_Tx(CanNode);
 			return;
 		}
 
 		if(RxHeader.StdId == Id_50)
 		{
-//			CanNode = 4;
-//			BGR_CAN_Tx(CanNode);
+			CanNode = 3;
+			BGR_CAN_Tx(CanNode);
+			HAL_Delay(1);
+			CanNode = 4;
+			BGR_CAN_Tx(CanNode);
 			return;
 		}
 	}
